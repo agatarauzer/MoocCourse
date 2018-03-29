@@ -1,7 +1,7 @@
 public class PlayerBoard extends Board {
 
-    public PlayerBoard(final int lengthOfBoard, final int heightOfBoard) {
-        super(lengthOfBoard, heightOfBoard);
+    public PlayerBoard(final int length, final int height) {
+        super(length, height);
         xPosition = 0;
         yPosition = 0;
     }

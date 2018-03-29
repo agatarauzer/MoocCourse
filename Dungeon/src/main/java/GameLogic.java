@@ -9,10 +9,18 @@ public class GameLogic {
     private final int maxX;
     private final int maxY;
 
-    public GameLogic(final int lengthOfBoard, final int heightOfBoard) {
-        maxX = lengthOfBoard;
-        maxY = heightOfBoard;
-        player = new PlayerBoard(lengthOfBoard, heightOfBoard);
+    private static final String KILL_VAMPIRE_INFO = "You have killed the vampire!";
+    private static final String OVER_BOARD_INFO = "Player move over the board is not possible! Try again.";
+    private static final String VAMPIRES_LEFT_INFO = "Vampires to kill: ";
+    private static final String MOVES_LEFT_INFO = "Moves left: ";
+    private static final String VAMPIRE_SYMBOL = " v ";
+    private static final String PLAYER_SYMBOL = " @ ";
+    private static final String POSITION_SYMBOL = " . ";
+
+    public GameLogic(final int length, final int height) {
+        maxX = length;
+        maxY = height;
+        player = new PlayerBoard(length, height);
 
         numberOfVampires = maxX * maxY / 8;
         numberOfTurns = numberOfVampires + 2;
@@ -33,8 +41,9 @@ public class GameLogic {
 
     private boolean isTheSame(VampireBoard vampire) {
         for(VampireBoard v : vampires){
-            if (v.equals(vampire))
+            if (v.equals(vampire)) {
                 return true;
+            }
         }
         return false;
     }
@@ -44,7 +53,7 @@ public class GameLogic {
             player.makeMove(moveX, moveY);
         }
         catch (IllegalArgumentException e){
-            System.out.println("Player move over the board is not possible! Try again.");
+            System.out.println(OVER_BOARD_INFO);
         }
         killVampire();
         vampires.clear();
@@ -57,7 +66,8 @@ public class GameLogic {
             if (player.equals(v)) {
                 vampires.remove(v);
                 numberOfVampires--;
-                System.out.println("You have killed the vampire!");
+                System.out.println(KILL_VAMPIRE_INFO);
+                break;
             }
         }
     }
@@ -71,8 +81,8 @@ public class GameLogic {
     }
 
     public void printPawnsPositionNumbers() {
-        System.out.println("\nVampires to kill: " + vampires.size());
-        System.out.println("Moves left: " + numberOfTurns);
+        System.out.println("\n" + VAMPIRES_LEFT_INFO + vampires.size());
+        System.out.println(MOVES_LEFT_INFO + numberOfTurns);
         System.out.println(player);
         for(VampireBoard v : vampires)
             System.out.println(v);
@@ -84,16 +94,16 @@ public class GameLogic {
                 boolean isPositionOccupied = false;
                 for (VampireBoard v : vampires) {
                     if (v.isOnPosition(j, i)) {
-                        System.out.print(" v ");
+                        System.out.print(VAMPIRE_SYMBOL);
                         isPositionOccupied = true;
                     }
                 }
                 if (player.isOnPosition(j, i)) {
-                    System.out.print(" @ ");
+                    System.out.print(PLAYER_SYMBOL);
                     isPositionOccupied = true;
                 }
                 if (!isPositionOccupied) {
-                    System.out.print(" . ");
+                    System.out.print(POSITION_SYMBOL);
                 }
             }
             System.out.println();

@@ -4,6 +4,21 @@ public class Dungeon {
     private Scanner scanner;
     private GameLogic game;
 
+    private static final String NEW_GAME_INFO = "Start game again!";
+    private static final String WIN_INFO = "YOU WON!!!";
+    private static final String LOST_INFO = "YOU LOST!!!";
+    private static final String INSERT_BOARD_VALUES_INFO = "Please insert board values (min 3, max 20 for each).";
+    private static final String BOARD_LENGTH = "Board length: ";
+    private static final String BOARD_HEIGHT = "Board height: ";
+    private static final String BOARD_VALUES_SCOPE_INFO = "Value must be in scope 3-20";
+    private static final String PRESS_TO_MOVE_INFO = "Press: ";
+    private static final String MAKE_MOVE_UP = "  'w' to go up, ";
+    private static final String MAKE_MOVE_DOWN = "  's' to go down, ";
+    private static final String MAKE_MOVE_LEFT = "  'a' to go left, ";
+    private static final String MAKE_MOVE_RIGHT = "  'd' to go right.";
+    private static final String PLAYER_MOVE_INFO = "Your turn: ";
+
+
     public Dungeon() {
         scanner = new Scanner(System.in);
     }
@@ -13,10 +28,9 @@ public class Dungeon {
             printStartingChoices();
         }
         catch (IllegalArgumentException e) {
-            System.out.println("Start game again!");
+            System.out.println(NEW_GAME_INFO);
             return;
         }
-
         printPlayerMoveMenu();
         while (!game.isWon() && !game.isLost()) {
             game.printPawnsPositionNumbers();
@@ -24,38 +38,40 @@ public class Dungeon {
             chooseMove();
         }
         if(game.isWon()) {
-            System.out.println("YOU WON!!!");
+            System.out.println(WIN_INFO);
         }
         else if(game.isLost()) {
-            System.out.println("YOU LOST!!!");
+            System.out.println(LOST_INFO);
         }
     }
 
     private void printStartingChoices(){
-        System.out.print("Please insert board values (min 2, max 20 for each). \nBoard length: ");
+        System.out.print(INSERT_BOARD_VALUES_INFO);
+        System.out.print("\n" + BOARD_LENGTH);
         int length = Integer.parseInt(scanner.nextLine());
-        if (length < 2 || length > 20) {
-            throw new IllegalArgumentException("Value must be in scope 2-20");
+        boolean isIncorrectScope = length < 3 || length > 20;
+        if (isIncorrectScope) {
+            throw new IllegalArgumentException(BOARD_VALUES_SCOPE_INFO);
         }
-        System.out.print("Board height: ");
+        System.out.print(BOARD_HEIGHT);
         int height = Integer.parseInt(scanner.nextLine());
-        if (height < 2 || height > 20) {
-            throw new IllegalArgumentException("Value must be in scope 2-20");
+        if (isIncorrectScope) {
+            throw new IllegalArgumentException(BOARD_VALUES_SCOPE_INFO);
         }
 
         game = new GameLogic(length, height);
     }
 
     private void printPlayerMoveMenu() {
-        System.out.println("\nPress: ");
-        System.out.println("  'w' to go up, ");
-        System.out.println("  's' to go down, ");
-        System.out.println("  'a' to go left, ");
-        System.out.println("  'd' to go right. \n");
+        System.out.println("\n" + PRESS_TO_MOVE_INFO);
+        System.out.println(MAKE_MOVE_UP);
+        System.out.println(MAKE_MOVE_DOWN);
+        System.out.println(MAKE_MOVE_LEFT);
+        System.out.println(MAKE_MOVE_RIGHT + "\n");
     }
 
     private void chooseMove() {
-        System.out.print("Your turn: ");
+        System.out.print(PLAYER_MOVE_INFO);
         String move = scanner.nextLine().toLowerCase();
         int moveX = 0;
         int moveY = 0;
